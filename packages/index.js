@@ -1,7 +1,9 @@
 import ZsSearchBox from './ZsSearchBox/index'
+import ParamsInput from './ParamsInput/index'
 
 const components = [
     ZsSearchBox,
+    ParamsInput,
 ]
 
 const install = function(Vue) {
@@ -17,4 +19,5 @@ if(typeof window !== 'undefined' && window.Vue) {
 export default {
     install,
     ZsSearchBox,
+    ParamsInput,
 }

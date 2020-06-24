@@ -1,11 +1,23 @@
 {
   "name": "ec-zs-components",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "description": "ant design vue 开发一些额外的组件，例如自定义添加组件等",
+  "main": "lib/ec-zs-components.umd.min.js",
+  "directories": {
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@10.43.200.81:22222/ec-zs-components/ec-zs-components.git"
+  },
+  "author": "zhuishao",
+  "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lib":"vue-cli-service build --target lib --name ec-zs-components --dest lib --entry packages/index.js"
   },
   "dependencies": {
     "ant-design-vue": "^1.6.0",
@@ -43,5 +55,6 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+
 }

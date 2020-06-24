@@ -1,15 +1,12 @@
 <template>
-    <div class="search-box-warp">
+    <a-form :form="form" :selfUpdate="true" class="search-box-warp">
         <div :class="['search-box-header',toggle?'fold':'']">
             <div class="search-box-list">
-                <slot></slot>
+                <slot :record="form.getFieldsValue()" :rules="rules"></slot>
             </div>
             <div class="search-box-button-group">
-                <slot name="action-container">
-                    <button>搜索</button>
-                    <button>重置</button>
-
-                </slot>
+                <a-button size="small" @click="searchBoxParams()" accesskey="s"><a-icon type="search" /></a-button>
+                <a-button size="small" @click="reloadForm" accesskey="r"><a-icon type="reload" /></a-button>
                 <a @click="toggleBox" v-show="toggle&&eSwitch">
                     <span class="link-a">展开
                         <i class="ec-icon-down">
@@ -26,25 +23,47 @@
                 </a>
             </div>
         </div>
-    </div>
+    </a-form>
 </template>
 
 <script>
     export default {
         name: 'ZsSearchBox',
         props: {
+            rules: {
+              type: Object,
+              default: () => {},
+            },
             // 展开收起功能开关
             eSwitch: {
                 type: Boolean,
                 default: true,
             },
+            reload: {
+                type: Function,
+                default: () => {},
+            }
         },
         data() {
             return {
+                form: this.$form.createForm(this),
                 toggle: true,
             };
         },
         methods: {
+            reloadForm() {
+                this.form.resetFields();
+                console.log(this.form);
+                this.$emit('click', this.form.getFieldsValue());
+            },
+            searchBoxParams() {
+                this.$emit('click', this.form.getFieldsValue());
+            },
+            handleChange(name,value) {
+                const obj ={};
+                obj[name] = value;
+                this.form.setFieldsValue(obj);
+            },
             toggleBox() {
                 this.toggle = !this.toggle;
             },
