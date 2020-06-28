@@ -2,7 +2,7 @@
     <a-form :form="form" :selfUpdate="true" class="search-box-warp">
         <div :class="['search-box-header',toggle?'fold':'']">
             <div class="search-box-list">
-                <slot :record="form.getFieldsValue()" :rules="rules"></slot>
+                <slot></slot>
             </div>
             <div class="search-box-button-group">
                 <a-button size="small" @click="searchBoxParams()" accesskey="s"><a-icon type="search" /></a-button>
@@ -30,19 +30,11 @@
     export default {
         name: 'ZsSearchBox',
         props: {
-            rules: {
-              type: Object,
-              default: () => {},
-            },
             // 展开收起功能开关
             eSwitch: {
                 type: Boolean,
                 default: true,
             },
-            reload: {
-                type: Function,
-                default: () => {},
-            }
         },
         data() {
             return {
@@ -50,7 +42,23 @@
                 toggle: true,
             };
         },
+        mounted() {
+            this.enterSearch();
+        },
         methods: {
+            enterSearch() {
+                document.addEventListener('keyup', (event) => {
+                    if (event.code === 'Enter') {
+                        const searchDomPosition = document.querySelector('.search-box-list');
+                        if (searchDomPosition !== null) {
+                            const relativePosition = event.target.compareDocumentPosition(searchDomPosition);
+                            if (relativePosition > 8 && relativePosition < 16) {
+                                this.searchBoxParams();
+                            }
+                        }
+                    }
+                });
+            },
             reloadForm() {
                 this.form.resetFields();
                 console.log(this.form);
@@ -104,6 +112,7 @@
         flex: 1;
         display: grid;
         grid-template-columns: repeat(3,1fr);
+        column-gap:1em;
         transition: all .3s;
         padding: 16px 16px 8px;
     }

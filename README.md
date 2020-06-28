@@ -1,25 +1,25 @@
-# ec-zs-components
+# 概览
 
-## Project setup
-```
-npm install
-```
+ant-design-vue的一些额外补充的组件，满足脑洞大开的产品经理的需求，也满足自己使用方便的需求。适用于安装了ant-design-vue的vue项目。
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## 快速使用
 
-### Compiles and minifies for production
+##### 下载
+
 ```
-npm run build
+npm i ec-zs-components
 ```
 
-### Lints and fixes files
+##### 完整引入
+
 ```
-npm run lint
+// main.js
+import EcZsComponents from 'ec-zs-components'
+import 'ec-zs-components/lib/z-ui-component.css'
+Vue.use(EcZsComponents)
 ```
-### 文档地址
-在packages每个单独的组件下
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## 文档
+#### [文档地址]https://github.com/zhuishao/ec-zs-components
+> 高级检索 ./packages/ZsSearchBox/高级检索.md  
+> 自定义添加 ./packages/ParamsInput/自定义添加.md

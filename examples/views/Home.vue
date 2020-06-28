@@ -2,16 +2,56 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <zs-search-box
-            :rules="modRules"
             @click="searchTheValue"
     >
-      <template v-slot:default="{record, rules}">
+      <template v-slot:default="">
         <a-form-item
                 label="名称"
+                v-bind="modalLayout"
         >
           <a-input
-                  v-decorator="rules.param1"
+                  v-decorator="modRules.param1"
           ></a-input>
+        </a-form-item>
+        <a-form-item
+                label="地址"
+                v-bind="modalLayout"
+        >
+          <a-select
+                  v-decorator="['key']"
+          >
+            <a-select-option :value="1">1</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item
+                label="地址1"
+                v-bind="modalLayout"
+        >
+          <a-select
+                  v-decorator="['key1']"
+          >
+            <a-select-option :value="1">1</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item
+                label="地址2"
+                v-bind="modalLayout"
+        >
+          <a-select
+                  v-decorator="['key2']"
+          >
+            <a-select-option :value="1">1</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item
+                label="地址3"
+                v-bind="modalLayout"
+        >
+          <a-select
+                  v-decorator="['key3']"
+          >
+            <a-select-option :value="1">1</a-select-option>
+          </a-select>
         </a-form-item>
       </template>
     </zs-search-box>
@@ -37,9 +77,7 @@
     wrapperCol: { class: 'modalWrapperLayout' },
   };
   const modRules = {
-    param1: ['param1', {
-      initialValue: 2,
-    }]
+    param1: ['param1']
   };
 
 export default {
