@@ -62,6 +62,7 @@
               label="属性"
       >
         <params-input
+                :drag="true"
                 param1="d"
                 param2="f"
                 v-decorator="['aa']"

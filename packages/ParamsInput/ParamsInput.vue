@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :class="[drag?'drag-wrap':'']">
         <div :class="['group-wrap', bordered? 'border-wrap':'']" v-for="key in keys" :key="key">
             <div class="item" v-if="param1&&!getUnVisible(1)">
                 <slot name="param1" :index="key - 1" :innerValue="paramsList[key - 1][param1]" :paramName="param1">
@@ -58,6 +58,7 @@
             <!--      <div v-if="param3" class="gap-line">&#45;&#45;</div>-->
 
             <div v-if="!aline" class="remove-item" @click="onRemoveItem(key - 1)"><a-icon type="delete" /></div>
+            <div v-if="!aline&&drag" class="drag-thumb" draggable="true"><a-icon type="drag" /></div>
             <div class="extra-line" v-if="dpsparam"><slot name="dpsparam" :index="key-1" :innerValue="paramsList[key -1][dpsparam]" :paramName="dpsparam"></slot></div>
         </div>
         <a-button type="dashed" v-if="!aline" block @click="onCreateItem">
@@ -67,10 +68,12 @@
 </template>
 
 <script>
+    let target;
     export default {
         props: [
             'value',
             'only', // 是否只显示一行，且没有添加
+            'drag', // 是否支持拖拽排序
             'param1',
             'param2',
             'param3',
@@ -121,17 +124,73 @@
                 }
             },
         },
+        mounted() {
+            if (this.drag) {
+                this.onDragMethod();
+            }
+        },
         methods: {
+            onDragMethod() {
+                const dropbox = [].slice.call(document.querySelectorAll('.drag-wrap'));
+                dropbox.forEach(item => {
+                    item.addEventListener('dragstart', function (event){
+                        target = event.target.parentNode;
+                    })
+                    item.addEventListener('dragover', function (event) {
+                        event.preventDefault();
+                    })
+                    item.addEventListener('drop', function(event) {
+                        event.stopPropagation();
+                        event.preventDefault();
+                        let currentTarget;
+                        [].slice.call(event.currentTarget.querySelectorAll('.group-wrap')).forEach(res => {
+                            const rectRange = res.getBoundingClientRect()
+                            if (event.y >= rectRange.y &&event.y <= rectRange.y + rectRange.height ) {
+                                currentTarget = res;
+                            }
+                        })
+                        if (currentTarget) {
+                            const rect = currentTarget.getBoundingClientRect();
+                            const y = rect.y + rect.height/2;
+                            switch (target.compareDocumentPosition(currentTarget)) {
+                                case 2:
+                                    if (y > event.y) {
+                                        currentTarget.before(target);
+                                    } else {
+                                        currentTarget.after(target);
+                                    }
+                                    break;
+                                case 4:
+                                    if (y > event.y) {
+                                        currentTarget.before(target);
+                                    } else {
+                                        currentTarget.after(target);
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    })
+
+                })
+            },
             onCreateItem() {
                 this.keys = this.keys + 1;
                 const obj = {};
                 this.paramsList.push(obj);
+                // if (this.drag) {
+                //     this.onDragMethod();
+                // }
             },
             onRemoveItem(k) {
                 const paramsList = [...this.paramsList];
                 paramsList.splice(k, 1);
                 this.triggerChange(paramsList);
                 this.keys = this.keys - 1;
+                // if (this.drag) {
+                //     this.onDragMethod();
+                // }
             },
             handleChange(key, event, paramName) {
                 const paramsList = [...this.paramsList];
@@ -142,6 +201,15 @@
             handleValueChange(key, value, paramName) {
                 const paramsList = [...this.paramsList];
                 paramsList[key][paramName] = value;
+                this.triggerChange(paramsList);
+            },
+            // 外部使用-列改变
+            handleColumnValueChange(key, value, paramName, otherValue = undefined) {
+                const paramsList = [...this.paramsList];
+                paramsList.forEach((item) => {
+                    item[paramName] = otherValue;
+                });
+                paramsList[key][paramName] = value.target.checked;
                 this.triggerChange(paramsList);
             },
             triggerChange(changedValue) {
@@ -178,6 +246,12 @@
         margin-left: -28px;
     }
     .remove-item {
+        flex: none;
+        width: 45px;
+        text-align: center;
+        cursor: pointer;
+    }
+    .drag-thumb{
         flex: none;
         width: 45px;
         text-align: center;
