@@ -21,5 +21,8 @@ Vue.use(EcZsComponents)
 
 ## 文档
 #### [文档地址]https://github.com/zhuishao/ec-zs-components
+## 额外说明
+#### [动态增减表单组件]www.zhuishao.net
+
 > 高级检索 ./packages/ZsSearchBox/高级检索.md  
 > 自定义添加 ./packages/ParamsInput/自定义添加.md
